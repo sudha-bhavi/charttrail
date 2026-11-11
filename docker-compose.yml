@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:17
+    container_name: charttrail-db
+    environment:
+      POSTGRES_USER: charttrail
+      POSTGRES_DB: charttrail
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - charttrail-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U charttrail -d charttrail"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  charttrail-pgdata:
