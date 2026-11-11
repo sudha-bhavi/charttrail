@@ -1,7 +1,7 @@
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 
-namespace FhirLens.Api.Tests;
+namespace ChartTrail.Api.Tests;
 
 public class PatientParsingTests
 {

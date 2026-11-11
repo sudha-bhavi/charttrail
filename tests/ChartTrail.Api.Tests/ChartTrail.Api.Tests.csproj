@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FhirLens.Api\FhirLens.Api.csproj" />
+    <ProjectReference Include="..\..\src\ChartTrail.Api\ChartTrail.Api.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="src/FhirLens.Api/FhirLens.Api.csproj" />
-  </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/FhirLens.Api.Tests/FhirLens.Api.Tests.csproj" />
-  </Folder>
-</Solution>
