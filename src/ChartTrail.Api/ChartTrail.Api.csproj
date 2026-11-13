@@ -11,5 +11,7 @@
     <PackageReference Include="Hl7.Fhir.R4" Version="6.8.0" />
     <PackageReference Include="Npgsql" Version="10.0.3" />
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="Db\schema.sql" LogicalName="schema.sql" />
+  </ItemGroup>
 </Project>
