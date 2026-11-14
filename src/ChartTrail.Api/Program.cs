@@ -1,4 +1,5 @@
 using ChartTrail.Api.Db;
+using ChartTrail.Api.Import;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("Default")
     ?? throw new InvalidOperationException("Missing ConnectionStrings:Default");
 
 builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString));
+builder.Services.AddSingleton<BundleImporter>();
 
 var app = builder.Build();
 
@@ -14,6 +16,16 @@ if (args.FirstOrDefault() == "migrate")
 {
     await SchemaInitializer.ApplyAsync(app.Services.GetRequiredService<NpgsqlDataSource>());
     Console.WriteLine("Schema applied.");
+    return;
+}
+
+if (args.FirstOrDefault() == "import")
+{
+    var folder = args.ElementAtOrDefault(1)
+        ?? throw new ArgumentException("Usage: import <folder-with-bundles>");
+    await SchemaInitializer.ApplyAsync(app.Services.GetRequiredService<NpgsqlDataSource>());
+    var result = await app.Services.GetRequiredService<BundleImporter>().ImportFolderAsync(folder);
+    Console.WriteLine(result);
     return;
 }
 
