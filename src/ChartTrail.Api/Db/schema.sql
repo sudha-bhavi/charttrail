@@ -44,3 +44,5 @@ CREATE TABLE IF NOT EXISTS observations (
     resource     jsonb NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ix_obs_patient_code ON observations (patient_id, code, effective_at);
+CREATE INDEX IF NOT EXISTS ix_patients_family_prefix ON patients (lower(family_name) text_pattern_ops);
+CREATE INDEX IF NOT EXISTS ix_patients_given_prefix  ON patients (lower(given_name) text_pattern_ops);

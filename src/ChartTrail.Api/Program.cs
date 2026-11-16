@@ -1,6 +1,7 @@
 using ChartTrail.Api.Db;
 using ChartTrail.Api.Import;
 using Npgsql;
+using ChartTrail.Api.Fhir;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +46,7 @@ app.MapGet("/health", async (NpgsqlDataSource db, ILogger<Program> logger, Cance
             statusCode: StatusCodes.Status503ServiceUnavailable);
     }
 });
-
+app.MapPatientEndpoints();
 app.Run();
 
 public partial class Program;
