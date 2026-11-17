@@ -19,9 +19,9 @@ public class PatientParsingTests
     [Fact]
     public void Parses_patient_json_into_typed_resource()
     {
-        var parser = new FhirJsonParser();
+        var parser = new FhirJsonDeserializer();
 
-        var patient = parser.Parse<Patient>(PatientJson);
+        var patient = parser.Deserialize<Patient>(PatientJson);
 
         Assert.Equal("test-patient-1", patient.Id);
         Assert.Equal("Testerson", patient.Name[0].Family);

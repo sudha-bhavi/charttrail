@@ -9,8 +9,8 @@ public record ImportResult(int Files, int Patients, int Encounters, int Medicati
 
 public class BundleImporter(NpgsqlDataSource db, ILogger<BundleImporter> logger)
 {
-    private static readonly FhirJsonParser Parser =
-        new(new ParserSettings { AcceptUnknownMembers = true, AllowUnrecognizedEnums = true });
+    private static readonly FhirJsonDeserializer Parser =
+        new(new DeserializerSettings { AcceptUnknownMembers = true, AllowUnrecognizedEnums = true });
     private static readonly FhirJsonSerializer Serializer = new();
 
     public async Task<ImportResult> ImportFolderAsync(string folder, CancellationToken ct = default)
@@ -50,7 +50,7 @@ public class BundleImporter(NpgsqlDataSource db, ILogger<BundleImporter> logger)
         string path, CancellationToken ct)
     {
         var json = await File.ReadAllTextAsync(path, ct);
-        var bundle = Parser.Parse<Bundle>(json);
+        var bundle = Parser.Deserialize<Bundle>(json);
         var resources = bundle.Entry.Select(e => e.Resource).Where(r => r?.Id is not null).ToList();
 
         var patient = resources.OfType<Patient>().Single();
