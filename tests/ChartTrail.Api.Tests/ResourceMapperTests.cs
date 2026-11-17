@@ -6,12 +6,12 @@ namespace ChartTrail.Api.Tests;
 
 public class ResourceMapperTests
 {
-    private static readonly FhirJsonParser Parser = new();
+    private static readonly FhirJsonDeserializer Parser = new();
 
     [Fact]
     public void Maps_a_numeric_lab_observation()
     {
-        var obs = Parser.Parse<Observation>("""
+        var obs = Parser.Deserialize<Observation>("""
             {
               "resourceType": "Observation",
               "id": "obs-1",
@@ -37,7 +37,7 @@ public class ResourceMapperTests
     [Fact]
     public void Maps_a_text_observation_with_a_standard_patient_reference()
     {
-        var obs = Parser.Parse<Observation>("""
+        var obs = Parser.Deserialize<Observation>("""
             {
               "resourceType": "Observation",
               "id": "obs-2",
@@ -59,7 +59,7 @@ public class ResourceMapperTests
     [Fact]
     public void Maps_patient_name_gender_and_birth_date()
     {
-        var patient = Parser.Parse<Patient>("""
+        var patient = Parser.Deserialize<Patient>("""
             {
               "resourceType": "Patient",
               "id": "patient-3",
@@ -80,7 +80,7 @@ public class ResourceMapperTests
     [Fact]
     public void Throws_when_an_observation_has_no_subject()
     {
-        var obs = Parser.Parse<Observation>("""
+        var obs = Parser.Deserialize<Observation>("""
             { "resourceType": "Observation", "id": "obs-3", "status": "final", "code": { "text": "x" } }
             """);
 

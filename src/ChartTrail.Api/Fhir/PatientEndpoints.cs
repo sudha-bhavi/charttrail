@@ -40,21 +40,12 @@ public static class PatientEndpoints
         command.Parameters.AddWithValue("limit", limit);
 
         var baseUrl = $"{request.Scheme}://{request.Host}";
-        var bundle = new Bundle { Type = Bundle.BundleType.Searchset, Total = total };
-
+               var patients = new List<Resource>();
         await using var reader = await command.ExecuteReaderAsync(ct);
         while (await reader.ReadAsync(ct))
-        {
-            var patient = FhirHttp.Parser.Parse<Patient>(reader.GetString(0));
-            bundle.Entry.Add(new Bundle.EntryComponent
-            {
-                FullUrl = $"{baseUrl}/Patient/{patient.Id}",
-                Resource = patient,
-                Search = new Bundle.SearchComponent { Mode = Bundle.SearchEntryMode.Match }
-            });
-        }
+            patients.Add(FhirHttp.Parser.Parse<Patient>(reader.GetString(0)));
 
-        return FhirHttp.Resource(bundle);
+        return FhirHttp.Resource(FhirHttp.SearchSet(patients, total, baseUrl));
     }
 
     private static async Task<IResult> ReadAsync(NpgsqlDataSource db, string id, CancellationToken ct)
