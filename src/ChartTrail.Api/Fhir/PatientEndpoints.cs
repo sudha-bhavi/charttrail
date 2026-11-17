@@ -43,7 +43,7 @@ public static class PatientEndpoints
                var patients = new List<Resource>();
         await using var reader = await command.ExecuteReaderAsync(ct);
         while (await reader.ReadAsync(ct))
-            patients.Add(FhirHttp.Parser.Parse<Patient>(reader.GetString(0)));
+            patients.Add(FhirHttp.Parser.Deserialize<Patient>(reader.GetString(0)));
 
         return FhirHttp.Resource(FhirHttp.SearchSet(patients, total, baseUrl));
     }
@@ -57,7 +57,7 @@ public static class PatientEndpoints
         return json is null
             ? FhirHttp.Error(StatusCodes.Status404NotFound, OperationOutcome.IssueType.NotFound,
                 $"Patient/{id} was not found")
-            : FhirHttp.Resource(FhirHttp.Parser.Parse<Patient>(json));
+            : FhirHttp.Resource(FhirHttp.Parser.Deserialize<Patient>(json));
     }
 
     // Default LIKE escape character is a backslash, so a user typing % or _ matches literally.

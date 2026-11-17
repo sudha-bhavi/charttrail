@@ -56,7 +56,7 @@ public static class ObservationEndpoints
         var observations = new List<Resource>();
         await using var reader = await command.ExecuteReaderAsync(ct);
         while (await reader.ReadAsync(ct))
-            observations.Add(FhirHttp.Parser.Parse<Observation>(reader.GetString(0)));
+            observations.Add(FhirHttp.Parser.Deserialize<Observation>(reader.GetString(0)));
 
         var baseUrl = $"{request.Scheme}://{request.Host}";
         return FhirHttp.Resource(FhirHttp.SearchSet(observations, total, baseUrl));
