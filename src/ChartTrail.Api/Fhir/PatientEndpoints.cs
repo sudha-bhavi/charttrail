@@ -1,3 +1,4 @@
+using Hl7.Fhir.Serialization;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
