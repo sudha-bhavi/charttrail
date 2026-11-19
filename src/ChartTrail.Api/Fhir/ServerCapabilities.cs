@@ -29,59 +29,55 @@ public static class ServerCapabilities
                         Type = "Patient",
                         Interaction =
                         [
-                            new CapabilityStatement.ResourceInteractionComponent
-                                { Code = CapabilityStatement.TypeRestfulInteraction.Read },
-                            new CapabilityStatement.ResourceInteractionComponent
-                                { Code = CapabilityStatement.TypeRestfulInteraction.SearchType }
+                            Interaction(CapabilityStatement.TypeRestfulInteraction.Read),
+                            Interaction(CapabilityStatement.TypeRestfulInteraction.SearchType)
                         ],
                         SearchParam =
                         [
-                            new CapabilityStatement.SearchParamComponent
-                            {
-                                Name = "name",
-                                Type = SearchParamType.String,
-                                Documentation = "Case-insensitive prefix match on family or given name"
-                            }
+                            Param("name", SearchParamType.String, "Case-insensitive prefix match on family or given name")
                         ]
                     },
                     new CapabilityStatement.ResourceComponent
                     {
                         Type = "Observation",
-                        Interaction =
-                        [
-                            new CapabilityStatement.ResourceInteractionComponent
-                                { Code = CapabilityStatement.TypeRestfulInteraction.SearchType }
-                        ],
+                        Interaction = [Interaction(CapabilityStatement.TypeRestfulInteraction.SearchType)],
                         SearchParam =
                         [
-                            new CapabilityStatement.SearchParamComponent
-                            {
-                                Name = "patient",
-                                Type = SearchParamType.Reference,
-                                Documentation = "Patient id, or Patient/<id>"
-                            },
-                            new CapabilityStatement.SearchParamComponent
-                            {
-                                Name = "code",
-                                Type = SearchParamType.Token,
-                                Documentation = "LOINC code, or system|code"
-                            },
-                            new CapabilityStatement.SearchParamComponent
-                            {
-                                Name = "category",
-                                Type = SearchParamType.Token,
-                                Documentation = "Observation category, for example laboratory"
-                            },
-                            new CapabilityStatement.SearchParamComponent
-                            {
-                                Name = "_sort",
-                                Type = SearchParamType.Special,
-                                Documentation = "date (oldest first) or -date (newest first)"
-                            }
+                            Param("patient", SearchParamType.Reference, "Patient id, or Patient/<id>"),
+                            Param("code", SearchParamType.Token, "LOINC code, or system|code"),
+                            Param("category", SearchParamType.Token, "Observation category, for example laboratory"),
+                            Param("_sort", SearchParamType.Special, "date (oldest first) or -date (newest first)")
+                        ]
+                    },
+                    new CapabilityStatement.ResourceComponent
+                    {
+                        Type = "Encounter",
+                        Interaction = [Interaction(CapabilityStatement.TypeRestfulInteraction.SearchType)],
+                        SearchParam =
+                        [
+                            Param("patient", SearchParamType.Reference, "Patient id, or Patient/<id>"),
+                            Param("_sort", SearchParamType.Special, "date (oldest first) or -date (newest first)")
+                        ]
+                    },
+                    new CapabilityStatement.ResourceComponent
+                    {
+                        Type = "MedicationRequest",
+                        Interaction = [Interaction(CapabilityStatement.TypeRestfulInteraction.SearchType)],
+                        SearchParam =
+                        [
+                            Param("patient", SearchParamType.Reference, "Patient id, or Patient/<id>"),
+                            Param("_sort", SearchParamType.Special, "date (oldest first) or -date (newest first)")
                         ]
                     }
                 ]
             }
         ]
     };
+
+    private static CapabilityStatement.ResourceInteractionComponent Interaction(
+        CapabilityStatement.TypeRestfulInteraction code) => new() { Code = code };
+
+    private static CapabilityStatement.SearchParamComponent Param(
+        string name, SearchParamType type, string documentation) =>
+        new() { Name = name, Type = type, Documentation = documentation };
 }

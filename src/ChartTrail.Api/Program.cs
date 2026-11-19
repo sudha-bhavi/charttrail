@@ -49,6 +49,7 @@ app.MapGet("/health", async (NpgsqlDataSource db, ILogger<Program> logger, Cance
 app.MapPatientEndpoints();
 app.MapObservationEndpoints();
 app.MapMetadataEndpoint();
+app.MapTimelineEndpoints();
 app.Run();
 
 public partial class Program;
