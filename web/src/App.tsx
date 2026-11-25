@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { loadPatientHistory, searchPatients } from "./fhir";
-import type { Patient } from "./fhir";
+import { errorMessage, loadPatientHistory, searchPatients } from "./fhir";
+import type { Observation, Patient } from "./fhir";
+import LabChart from "./LabChart";
 import { buildTimeline } from "./timeline";
 import type { TimelineItem, TimelineKind } from "./timeline";
 import "./App.css";
@@ -18,14 +19,12 @@ function patientName(patient: Patient): string {
   return full || patient.id;
 }
 
-const errorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : "Something went wrong";
-
 function App() {
   const [query, setQuery] = useState("");
   const [patients, setPatients] = useState<Patient[] | null>(null);
   const [selected, setSelected] = useState<Patient | null>(null);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
+  const [labs, setLabs] = useState<Observation[]>([]);
   const [truncated, setTruncated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +35,7 @@ function App() {
     setError(null);
     setSelected(null);
     setTimeline([]);
+    setLabs([]);
     try {
       const result = await searchPatients(query.trim());
       setPatients(result.items);
@@ -48,6 +48,7 @@ function App() {
     const request = ++latestRequest.current;
     setSelected(patient);
     setTimeline([]);
+    setLabs([]);
     setError(null);
     setLoading(true);
     try {
@@ -56,6 +57,7 @@ function App() {
       setTimeline(
         buildTimeline(history.encounters, history.medications, history.labs),
       );
+      setLabs(history.labs);
       setTruncated(history.truncated);
     } catch (e) {
       if (request === latestRequest.current) setError(errorMessage(e));
@@ -138,6 +140,11 @@ function App() {
                   Showing the first 1000 items of at least one list.
                 </p>
               )}
+
+              <h3>Lab trends</h3>
+              <LabChart key={selected.id} patientId={selected.id} labs={labs} />
+
+              <h3>Timeline</h3>
               <ol className="timeline">
                 {timeline.map((item) => (
                   <li

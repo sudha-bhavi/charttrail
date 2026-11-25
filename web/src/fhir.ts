@@ -97,3 +97,10 @@ export async function loadPatientHistory(patientId: string) {
     truncated,
   };
 }
+export const searchObservations = (patientId: string, code: string) =>
+  search<Observation>(
+    `/Observation?patient=${encodeURIComponent(patientId)}&code=${encodeURIComponent(code)}&_sort=date&_count=1000`,
+  );
+
+export const errorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : "Something went wrong";

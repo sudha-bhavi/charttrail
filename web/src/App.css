@@ -167,7 +167,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;
@@ -181,4 +181,27 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+select {
+  padding: 8px 10px;
+  font-size: 1rem;
+  color: inherit;
+  background: light-dark(#ffffff, #151b23);
+  border: 1px solid light-dark(#d1d9e0, #3d444d);
+  border-radius: 6px;
+}
+
+.lab-chart {
+  --chart-line: light-dark(#0969da, #4493f8);
+  --chart-grid: light-dark(#d1d9e0, #30363d);
+  --chart-text: light-dark(#59636e, #9198a1);
+  --chart-tooltip-bg: light-dark(#ffffff, #151b23);
+}
+
+.lab-chart .recharts-cartesian-grid line {
+  stroke: var(--chart-grid);
+}
+
+.lab-chart .recharts-text {
+  fill: var(--chart-text);
 }
